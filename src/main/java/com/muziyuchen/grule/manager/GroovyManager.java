@@ -3,6 +3,7 @@ package com.muziyuchen.grule.manager;
 import com.muziyuchen.grule.context.Context;
 import groovy.lang.GroovyClassLoader;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -43,16 +44,15 @@ public class GroovyManager {
      * @return 执行结果
      * */
     public Object invokeMethod(Class groovyClass, String methodName, Object... args) throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
-        if (groovyClass != null) {
-            try {
-                Method runMethod = groovyClass.getMethod(methodName, Context.class);
-                Object actionInstance = groovyClass.newInstance();
-                return runMethod.invoke(actionInstance, args);
-            } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                throw e;
-            }
-        } else {
+        if (groovyClass == null) {
             return null;
+        }
+        try {
+            Method runMethod = groovyClass.getMethod(methodName, Context.class);
+            Object actionInstance = groovyClass.newInstance();
+            return runMethod.invoke(actionInstance, args);
+        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            throw e;
         }
     }
 

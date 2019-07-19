@@ -8,9 +8,10 @@ import com.muziyuchen.grule.action.ActionTest;
 import com.muziyuchen.grule.action.GroovyAction;
 import com.muziyuchen.grule.condition.AbstractCondition;
 import com.muziyuchen.grule.condition.Condition;
-import com.muziyuchen.grule.condition.GrovvyCondition;
+import com.muziyuchen.grule.condition.GroovyCondition;
 import com.muziyuchen.grule.condition.ConditionTest;
 import com.muziyuchen.grule.context.SimpleContext;
+import com.muziyuchen.grule.context.TemplateContext;
 import com.muziyuchen.grule.exception.AutoConfigException;
 import org.junit.Test;
 
@@ -49,12 +50,49 @@ public class RuleEngineTest {
                 "\t\tassertEquals(context.get(\"test\"), \"hello\")\n" +
                 "\t}\n" +
                 "}";
-        Condition condition = new GrovvyCondition(conditionScript);
+        Condition condition = new GroovyCondition(conditionScript);
         GroovyAction action = new GroovyAction(actionScript);
 
         condition.registerTrueUnit(action);
 
         RuleEngine.getInstance().setEntry(condition).run(new SimpleContext());
+        System.out.println(condition.getResult());
+    }
+
+    @Test
+    public void testTemplateGroovy(){
+        String conditionScript = "import groovy.json.JsonSlurper\n" +
+                "import com.muziyuchen.grule.context.Context\n" +
+                "class TemplateGroovy {\n" +
+                "    def validData(Context context){\n" +
+                "        def jsonSlurper = new JsonSlurper()\n" +
+                "        def jsonObj = jsonSlurper.parseText(context.getJsonData())\n" +
+                "\n" +
+                "        if (context.getValidType().equalsIgnoreCase(\"大于\")) {\n" +
+                "            return jsonObj[context.getValidParam()] > context.getThresholdValue()\n" +
+                "        } else if (context.getValidType().equalsIgnoreCase(\"大于等于\")) {\n" +
+                "            return jsonObj[context.getValidParam()] >= context.getThresholdValue()\n" +
+                "        } else if (context.getValidType().equalsIgnoreCase(\"小于\")) {\n" +
+                "            return jsonObj[context.getValidParam()] < context.getThresholdValue()\n" +
+                "        } else if (context.getValidType().equalsIgnoreCase(\"小于等于\")) {\n" +
+                "            return jsonObj[context.getValidParam()] <= context.getThresholdValue()\n" +
+                "        } else {\n" +
+                "            return jsonObj[context.getValidParam()] == context.getThresholdValue()\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n";
+        Condition condition = new GroovyCondition(conditionScript);
+
+        TemplateContext templateContext = new TemplateContext();
+        templateContext.setJsonData("{\"data\":34,\"data2\":74,\"data3\":40}");
+        templateContext.setValidParam("data3");
+        templateContext.setValidType("等于");
+        templateContext.setThresholdValue(41);
+        templateContext.put(Constants.METHOD_NAME, "validData");
+
+
+        RuleEngine.getInstance().setEntry(condition).run(templateContext);
+        System.out.println(condition.getResult());
     }
 
     @Test

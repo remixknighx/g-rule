@@ -24,4 +24,5 @@ public class SimpleContext implements Context {
     public Object get(String key) {
         return this._map.get(key);
     }
+
 }

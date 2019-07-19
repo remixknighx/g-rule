@@ -27,4 +27,5 @@ public interface Constants {
 
     String ACTION = "action";
 
+    String METHOD_NAME = "methodName";
 }

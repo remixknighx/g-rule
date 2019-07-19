@@ -1,8 +1,10 @@
 package com.muziyuchen.grule.condition;
 
+import com.muziyuchen.grule.Constants;
 import com.muziyuchen.grule.context.Context;
 import com.muziyuchen.grule.exception.UnitRunException;
 import com.muziyuchen.grule.manager.GroovyManager;
+import org.codehaus.groovy.ant.Groovy;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
  * Groovy 条件类
  * Created by LI_ZHEN on 2016/5/5.
  */
-public class GrovvyCondition extends AbstractCondition {
+public class GroovyCondition extends AbstractCondition {
 
     private Class groovyClass = null;
 
@@ -24,15 +26,14 @@ public class GrovvyCondition extends AbstractCondition {
     /**
      * Groovy 条件类
      * */
-    public GrovvyCondition() { super(); }
+    public GroovyCondition() { super(); }
 
     /**
      * Groovy 条件类
      * @param file Groovy 脚本文件
      * @throws IOException
      * */
-    public GrovvyCondition(File file) throws IOException {
-        super();
+    public GroovyCondition(File file) throws IOException {
         if (file != null && file.exists()) {
             this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(file);
         }
@@ -42,8 +43,7 @@ public class GrovvyCondition extends AbstractCondition {
      * Groovy 条件类
      * @param script Groovy 脚本
      * */
-    public GrovvyCondition(String script) {
-        super();
+    public GroovyCondition(String script) {
         if (script != null && script.trim().length() != 0) {
             this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(script);
         }
@@ -53,10 +53,7 @@ public class GrovvyCondition extends AbstractCondition {
     public void run(Context context) throws UnitRunException {
         try {
             if (this.groovyClass == null) {
-                /*
-                 * 如果 Groovy 类为空
-                 * 根据 path 和 script 字段获取 Groovy 类
-                 */
+                // 如果 Groovy 类为空,根据 path 和 script 字段获取 Groovy 类
                 if (this.path != null && this.path.trim().length() != 0) {
                     File file = new File(this.path);
                     if (file.exists()) {
@@ -67,7 +64,7 @@ public class GrovvyCondition extends AbstractCondition {
                 }
             }
 
-            this.result = (Boolean) GroovyManager.getInstance().invokeMethod(this.groovyClass, "run", context);
+            this.result = (Boolean) GroovyManager.getInstance().invokeMethod(this.groovyClass, (String) context.get(Constants.METHOD_NAME), context);
         } catch (IOException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
             throw new UnitRunException(e);
         }

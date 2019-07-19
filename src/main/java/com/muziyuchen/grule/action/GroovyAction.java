@@ -1,5 +1,6 @@
 package com.muziyuchen.grule.action;
 
+import com.muziyuchen.grule.Constants;
 import com.muziyuchen.grule.context.Context;
 import com.muziyuchen.grule.exception.UnitRunException;
 import com.muziyuchen.grule.manager.GroovyManager;
@@ -30,8 +31,9 @@ public class GroovyAction extends AbstractAction {
      * @throws IOException
      * */
     public GroovyAction(File file) throws IOException {
-        super();
-        if (file != null && file.exists()) this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(file);
+        if (file != null && file.exists()) {
+            this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(file);
+        }
     }
 
     /**
@@ -39,7 +41,6 @@ public class GroovyAction extends AbstractAction {
      * @param script Groovy 脚本
      * */
     public GroovyAction(String script) {
-        super();
         if (script != null && script.trim().length() != 0) {
             this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(script);
         }
@@ -49,10 +50,7 @@ public class GroovyAction extends AbstractAction {
     public void run(Context context) throws UnitRunException {
         try {
             if (this.groovyClass == null) {
-                /*
-                 * 如果 Groovy 类为空
-                 * 根据 path 和 script 字段获取 Groovy 类
-                 */
+                //  如果 Groovy 类为空,根据 path 和 script 字段获取 Groovy 类
                 if (this.path != null && this.path.trim().length() != 0) {
                     File file = new File(this.path);
                     if (file.exists()) {
@@ -63,7 +61,7 @@ public class GroovyAction extends AbstractAction {
                 }
             }
 
-            GroovyManager.getInstance().invokeMethod(this.groovyClass, "run", context);
+            GroovyManager.getInstance().invokeMethod(this.groovyClass, (String) context.get(Constants.METHOD_NAME), context);
         } catch (IOException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
             throw new UnitRunException(e);
         }
