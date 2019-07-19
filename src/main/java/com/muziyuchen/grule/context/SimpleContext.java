@@ -15,10 +15,12 @@ public class SimpleContext implements Context {
         this._map = new HashMap<String, Object>();
     }
 
+    @Override
     public void put(String key, Object value) {
         this._map.put(key, value);
     }
 
+    @Override
     public Object get(String key) {
         return this._map.get(key);
     }

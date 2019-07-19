@@ -3,7 +3,7 @@ package com.muziyuchen.grule.exception;
 /**
  * Created by LI_ZHEN on 2016/5/6.
  */
-public class AutoConfigException extends Exception {
+public class AutoConfigException extends RuntimeException {
 
     public AutoConfigException(String message) {
         super(message);

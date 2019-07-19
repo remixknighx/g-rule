@@ -45,7 +45,9 @@ public class RuleEngine {
      * @param context 上下文
      * */
     public void run(Context context) {
-        if (context == null) throw new IllegalArgumentException("Context should not be null.");
+        if (context == null) {
+            throw new IllegalArgumentException("Context should not be null.");
+        }
         runLoop(this.entry, context);
     }
 

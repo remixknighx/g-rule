@@ -40,9 +40,12 @@ public class GroovyAction extends AbstractAction {
      * */
     public GroovyAction(String script) {
         super();
-        if (script != null && script.trim().length() != 0) this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(script);
+        if (script != null && script.trim().length() != 0) {
+            this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(script);
+        }
     }
 
+    @Override
     public void run(Context context) throws UnitRunException {
         try {
             if (this.groovyClass == null) {
@@ -52,7 +55,9 @@ public class GroovyAction extends AbstractAction {
                  */
                 if (this.path != null && this.path.trim().length() != 0) {
                     File file = new File(this.path);
-                    if (file.exists()) this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(file);
+                    if (file.exists()) {
+                        this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(file);
+                    }
                 } else if (this.script != null && this.script.trim().length() != 0) {
                     this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(script);
                 }

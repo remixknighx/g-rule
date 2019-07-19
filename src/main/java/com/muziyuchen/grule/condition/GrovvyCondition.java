@@ -33,7 +33,9 @@ public class GrovvyCondition extends AbstractCondition {
      * */
     public GrovvyCondition(File file) throws IOException {
         super();
-        if (file != null && file.exists()) this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(file);
+        if (file != null && file.exists()) {
+            this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(file);
+        }
     }
 
     /**
@@ -42,9 +44,12 @@ public class GrovvyCondition extends AbstractCondition {
      * */
     public GrovvyCondition(String script) {
         super();
-        if (script != null && script.trim().length() != 0) this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(script);
+        if (script != null && script.trim().length() != 0) {
+            this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(script);
+        }
     }
 
+    @Override
     public void run(Context context) throws UnitRunException {
         try {
             if (this.groovyClass == null) {
@@ -54,7 +59,9 @@ public class GrovvyCondition extends AbstractCondition {
                  */
                 if (this.path != null && this.path.trim().length() != 0) {
                     File file = new File(this.path);
-                    if (file.exists()) this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(file);
+                    if (file.exists()) {
+                        this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(file);
+                    }
                 } else if (this.script != null && this.script.trim().length() != 0) {
                     this.groovyClass = GroovyManager.getInstance().getGroovyClassLoader().parseClass(script);
                 }
@@ -66,6 +73,7 @@ public class GrovvyCondition extends AbstractCondition {
         }
     }
 
+    @Override
     public boolean getResult() {
         return this.result;
     }

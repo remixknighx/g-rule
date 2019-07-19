@@ -1,7 +1,6 @@
 package com.muziyuchen.grule.condition;
 
 import com.muziyuchen.grule.Unit;
-import com.muziyuchen.grule.action.Action;
 
 /**
  * 条件单元接口

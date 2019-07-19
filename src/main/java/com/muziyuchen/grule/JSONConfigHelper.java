@@ -1,8 +1,6 @@
 package com.muziyuchen.grule;
 
 import com.alibaba.fastjson.JSONObject;
-import com.muziyuchen.grule.Constants;
-import com.muziyuchen.grule.Unit;
 import com.muziyuchen.grule.action.Action;
 import com.muziyuchen.grule.condition.Condition;
 
@@ -19,7 +17,7 @@ class JSONConfigHelper {
             String type = jo.getString(Constants.JSON_FIELDNAME_TYPE);
             Class unitClass = Class.forName(jo.getString(Constants.JSON_FIELDNAME_CLASS));
 
-            if ("action".equals(type)) {
+            if (Constants.ACTION.equals(type)) {
                 Action action = (Action) unitClass.newInstance();
                 JSONObject fieldsJo = jo.getJSONObject(Constants.JSON_FIELDNAME_FIELDS);
                 if (fieldsJo != null) {
@@ -27,7 +25,7 @@ class JSONConfigHelper {
                 }
                 action.registerUnit(parseLoop(jo.getJSONObject(Constants.JSON_FIELDNAME_ACTION_UNIT)));
                 unit = action;
-            } else if ("condition".equals(type)) {
+            } else if (Constants.CONDITION.equals(type)) {
                 Condition condition = (Condition) unitClass.newInstance();
                 JSONObject fieldsJo = jo.getJSONObject(Constants.JSON_FIELDNAME_FIELDS);
                 if (fieldsJo != null) {
